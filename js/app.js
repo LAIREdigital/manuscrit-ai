@@ -7,6 +7,9 @@ import { exportMarkdown, exportWord, exportPdf, exportBackup, bookSections, sort
 let state = load();
 let settings = loadSettings(DEFAULT_TASKS);
 let keys = loadKeys();
+// Drop providers this app no longer supports (keys or job picks saved by an older version).
+for (const id of Object.keys(keys)) if (!PROVIDERS[id]) delete keys[id];
+for (const t of Object.keys(settings.tasks)) if (settings.tasks[t] && !PROVIDERS[settings.tasks[t]]) settings.tasks[t] = DEFAULT_TASKS[t];
 
 // view: { kind: "inbox" | "all" | "book" | "search", bookId?, chapterId?, read?, lumiere? }
 let view = { kind: "inbox" };
@@ -531,7 +534,7 @@ function lumiereView(book) {
   const ready = Boolean(conn("research"));
   let html = `<section class="lumiere"><p class="small muted">Lumi&egrave;re reads your notes for this book and answers about them.
     It does not write your book.${ready ? ` Using ${esc(providerName("research"))}.` : ""}</p>`;
-  if (!ready) html += `<div class="tip"><span>Lumi&egrave;re needs a free AI key. Gemini is best for whole books, Groq or Cerebras work too.</span><button class="tip-x" data-action="open-settings">Open Settings</button></div>`;
+  if (!ready) html += `<div class="tip"><span>Lumi&egrave;re needs a free AI key. Groq, Cerebras or OpenRouter all work.</span><button class="tip-x" data-action="open-settings">Open Settings</button></div>`;
   html += `<div class="row-buttons">`;
   for (const [id, r] of Object.entries(RESEARCH)) html += `<button data-action="lumiere" data-q="${id}"${lumiere.busy || !ready ? " disabled" : ""}>${r.label}</button>`;
   html += `</div><div class="ask-row"><input id="lumiere-q" placeholder="Ask about your book, e.g. Where do I mention the lake house?"${!ready ? " disabled" : ""}>

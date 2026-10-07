@@ -31,11 +31,9 @@ Settings has a slot for each free provider and a picker for which one does each 
 
 | Provider | Default model | Good for |
 | --- | --- | --- |
-| Groq | `openai/gpt-oss-120b` | Sorting, splitting (fast) |
+| Groq | `openai/gpt-oss-120b` | Sorting, splitting, Lumière research (fast) |
 | Cerebras | `gpt-oss-120b` | Edit suggestions, backup for Groq |
-| Google Gemini | `gemini-2.5-flash` | Lumière research on whole books |
-| OpenRouter | `google/gemma-4-31b-it:free` | Any `:free` model |
-| Mistral | `mistral-small-latest` | Extra fallback |
+| OpenRouter | `google/gemma-4-31b-it:free` | Any `:free` model, fallback |
 
 If a job's provider has no key, the app uses the first provider that has one.
 **Load keys from file** reads a JSON file saved by the app, `provider: key` lines, or a notes file that

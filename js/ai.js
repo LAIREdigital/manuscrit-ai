@@ -18,13 +18,6 @@ export const PROVIDERS = {
     match: /^csk-[A-Za-z0-9]+$/,
     note: "Very fast. Good backup for Groq.",
   },
-  gemini: {
-    name: "Google Gemini",
-    model: "gemini-2.5-flash",
-    signup: "https://aistudio.google.com/apikey",
-    match: /^AIza[0-9A-Za-z_-]{35}$/,
-    note: "Long memory. Best for Lumiere research across a whole book.",
-  },
   openrouter: {
     name: "OpenRouter",
     url: "https://openrouter.ai/api/v1/chat/completions",
@@ -32,14 +25,6 @@ export const PROVIDERS = {
     signup: "https://openrouter.ai/keys",
     match: /^sk-or-[A-Za-z0-9-]+$/,
     note: "Many free models with one key. Models ending in :free cost nothing.",
-  },
-  mistral: {
-    name: "Mistral",
-    url: "https://api.mistral.ai/v1/chat/completions",
-    model: "mistral-small-latest",
-    signup: "https://console.mistral.ai/api-keys",
-    match: null,
-    note: "Free tier with tight rate limits.",
   },
 };
 
@@ -50,13 +35,12 @@ export const TASKS = {
   research: { name: "Lumière research", help: "Summaries, continuity and questions about a book." },
 };
 
-export const DEFAULT_TASKS = { sort: "groq", split: "groq", assist: "cerebras", research: "gemini" };
+export const DEFAULT_TASKS = { sort: "groq", split: "groq", assist: "cerebras", research: "groq" };
 
 function friendlyError(provider, status, body) {
   const msg = (body && (body.error?.message || body.message)) || "";
   if (status === 401) return "Key was rejected. Check it was pasted in full.";
   if (status === 429) return "Free limit reached for now. Try again in a minute, or pick another provider.";
-  if (status === 403 && provider === "gemini") return "This key is blocked for Gemini. Turn on the Generative Language API for it in Google Cloud, or make a key at aistudio.google.com.";
   if (status === 404) return `Model not found. ${msg}`.trim();
   return `${status} ${msg}`.trim();
 }
@@ -71,20 +55,7 @@ export async function complete({ provider, key, model, system, user, maxTokens =
   let res;
   let body;
   try {
-    if (provider === "gemini") {
-      res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            systemInstruction: { parts: [{ text: system }] },
-            contents: [{ role: "user", parts: [{ text: user }] }],
-            generationConfig: { maxOutputTokens: maxTokens },
-          }),
-        }
-      );
-    } else {
+    {
       res = await fetch(p.url, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
@@ -104,10 +75,7 @@ export async function complete({ provider, key, model, system, user, maxTokens =
   }
   if (!res.ok) throw new Error(`${p.name}: ${friendlyError(provider, res.status, body)}`);
 
-  const text =
-    provider === "gemini"
-      ? (body?.candidates?.[0]?.content?.parts || []).map((x) => x.text || "").join("")
-      : body?.choices?.[0]?.message?.content || "";
+  const text = body?.choices?.[0]?.message?.content || "";
   if (!text.trim()) throw new Error(`${p.name} returned an empty answer. Try again.`);
   return text;
 }
@@ -152,11 +120,6 @@ export function parseKeysFile(text) {
   found.groq ||= grab(/gsk_[A-Za-z0-9]{20,}/);
   found.cerebras ||= grab(/csk-[A-Za-z0-9]{20,}/);
   found.openrouter ||= grab(/sk-or-[A-Za-z0-9-]{20,}/);
-  found.gemini ||= grab(/AIza[0-9A-Za-z_-]{35}/);
-  if (!found.mistral) {
-    const m = clean.match(/mistral[^\n]*\n\s*[*-]?\s*([A-Za-z0-9_]{20,})/i);
-    if (m) found.mistral = m[1];
-  }
   for (const k of Object.keys(found)) if (!found[k]) delete found[k];
   return found;
 }
