@@ -9,6 +9,22 @@ let settings = loadSettings(DEFAULT_TASKS);
 let keys = loadKeys();
 // Drop providers this app no longer supports (keys or job picks saved by an older version).
 for (const id of Object.keys(keys)) if (!PROVIDERS[id]) delete keys[id];
+// One-tap setup: a private link like ...#setup=<base64 JSON of {keys}> saves the keys on this
+// device, then the link is wiped from the address bar. The part after # never reaches any server.
+let setupMsg = "";
+if (location.hash.startsWith("#setup=")) {
+  try {
+    const b64 = location.hash.slice(7).replace(/-/g, "+").replace(/_/g, "/");
+    const data = JSON.parse(decodeURIComponent(escape(atob(b64))));
+    const added = Object.keys(data.keys || {}).filter((id) => PROVIDERS[id] && data.keys[id]);
+    for (const id of added) keys[id] = data.keys[id];
+    saveKeys(keys);
+    setupMsg = added.length ? `All set. AI is on (${added.map((i) => PROVIDERS[i].name).join(", ")}).` : "";
+  } catch {
+    setupMsg = "That setup link did not work. Ask Sam for a new one.";
+  }
+  history.replaceState(null, "", location.pathname + location.search);
+}
 for (const t of Object.keys(settings.tasks)) if (settings.tasks[t] && !PROVIDERS[settings.tasks[t]]) settings.tasks[t] = DEFAULT_TASKS[t];
 
 // view: { kind: "inbox" | "all" | "book" | "search", bookId?, chapterId?, read?, lumiere? }
@@ -1202,3 +1218,4 @@ document.addEventListener("keydown", (e) => {
 
 render();
 if (!settings.toured) showTour(0);
+if (setupMsg) toast(setupMsg, 6000);
