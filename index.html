@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manuscrit.AI</title>
+  <meta name="description" content="The second brain for authors. Capture scattered ideas by voice, text or screenshot and let Plumi file them into your books.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101c3d'/%3E%3Cpath d='M46 10C30 14 20 28 18 50l4-2c2-14 10-26 24-38z' fill='%23d4af37'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="icon-btn menu-btn" data-action="toggle-nav" aria-label="Open books">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <a class="brand" href="./" aria-label="Manuscrit.AI home">
+      <svg class="feather" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M50 6C30 10 16 26 14 54l5-3c1-6 3-11 6-16l9 1-6-4c3-5 7-9 11-13l8 1-6-4c3-3 6-6 9-10z" fill="currentColor"/>
+        <path d="M14 54 44 16" stroke="var(--navy)" stroke-width="1.5" fill="none"/>
+      </svg>
+      <span>Manuscrit<em>.AI</em></span>
+    </a>
+    <div class="mode" role="group" aria-label="Writing mode">
+      <button data-action="mode" data-mode="authentique" title="Your exact words. Nothing is ever rewritten.">Authentique</button>
+      <button data-action="mode" data-mode="assiste" title="Optional suggestions you approve.">Assist&eacute;</button>
+    </div>
+    <button class="icon-btn settings-btn" data-action="open-settings" aria-label="Settings">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </header>
+
+  <div class="layout">
+    <nav id="nav" class="nav" aria-label="Books"></nav>
+    <main id="main" class="main"></main>
+  </div>
+
+  <dialog id="book-dialog">
+    <form method="dialog" id="book-form">
+      <h2 id="book-dialog-title">Book</h2>
+      <label>Title <input name="title" required maxlength="120"></label>
+      <label>Keywords <small>comma separated. Plumi uses these to file notes.</small>
+        <input name="keywords" placeholder="garden, grandmother, roses"></label>
+      <label>Chapters <small>one per line. Optional keywords after a colon.</small>
+        <textarea name="chapters" rows="6" placeholder="Spring: seeds, planting&#10;Winter: frost, snow"></textarea></label>
+      <div class="dialog-actions">
+        <button type="button" class="danger ghost" data-action="delete-book" id="delete-book-btn">Delete book</button>
+        <span class="spacer"></span>
+        <button value="cancel" class="ghost" formnovalidate>Cancel</button>
+        <button value="save" class="primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="settings-dialog">
+    <form method="dialog" id="settings-form">
+      <h2>Settings</h2>
+      <p class="muted">Your writing is stored only in this browser. Back it up often.</p>
+      <fieldset>
+        <legend>Claude (optional)</legend>
+        <p class="muted small">Paste your own Anthropic API key to let Plumi sort with Claude and to get Assist&eacute; suggestions.
+          The key stays on this device and is sent only to api.anthropic.com. Without a key, Plumi sorts by keywords.</p>
+        <label>API key <input name="apiKey" type="password" autocomplete="off" placeholder="sk-ant-..."></label>
+        <label>Model
+          <select name="model">
+            <option value="claude-opus-5-5">Claude Opus 5.5 (best)</option>
+            <option value="claude-sonnet-5-5">Claude Sonnet 5.5 (faster, cheaper)</option>
+            <option value="claude-haiku-4-5">Claude Haiku 4.5 (cheapest)</option>
+          </select>
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>Your data</legend>
+        <div class="row-buttons">
+          <button type="button" data-action="backup">Download backup</button>
+          <label class="button-like">Restore backup <input type="file" accept="application/json" id="restore-input" hidden></label>
+          <button type="button" class="danger ghost" data-action="reset">Erase everything</button>
+        </div>
+      </fieldset>
+      <div class="dialog-actions">
+        <span class="spacer"></span>
+        <button value="cancel" class="ghost" formnovalidate>Close</button>
+        <button value="save" class="primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
