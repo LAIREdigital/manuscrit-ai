@@ -5,6 +5,35 @@ export function speechSupported() {
 }
 
 /**
+ * Join finished speech segments without repeats. Phone browsers often resend the whole
+ * phrase so far as each new result ("I went", "I went to the", "I went to the store"),
+ * which doubled text before. A segment that extends the previous one replaces it, and a
+ * segment already contained in the previous one is dropped.
+ */
+export function mergeSegments(segments) {
+  const out = [];
+  const norm = (t) => t.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+  for (const raw of segments) {
+    const t = String(raw.text || "").trim();
+    if (!t) continue;
+    const prev = out[out.length - 1];
+    if (prev) {
+      const a = norm(prev.text);
+      const b = norm(t);
+      if (b.startsWith(a)) {
+        prev.text = t;
+        continue;
+      }
+      if (a.endsWith(b) || a === b) continue;
+    }
+    out.push({ text: t, pause: Boolean(raw.pause) });
+  }
+  return out.map((x, i) => (i === 0 ? "" : x.pause ? "\n\n" : " ") + x.text).join("");
+}
+
+const isMobile = () => /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+/**
  * Start dictation. Calls onText(finalText, interimText) as words arrive.
  * Returns a stop() function.
  */
@@ -12,34 +41,44 @@ export function startDictation({ onText, onEnd, onError, lang = "en-US" }) {
   const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
   const rec = new Rec();
   rec.lang = lang;
-  rec.continuous = true;
+  // Continuous mode is what repeats words on phones. There we listen one phrase at a time
+  // and restart automatically, which feels the same to the author.
+  rec.continuous = !isMobile();
   rec.interimResults = true;
 
-  let finalText = "";
+  const segments = []; // finished phrases from earlier listening sessions
+  let session = []; // finished phrases in the current session, keyed by result index
   let stopped = false;
   let lastFinalAt = Date.now();
   // A pause longer than this starts a new paragraph, which the splitter treats as a new note.
   const PAUSE_MS = 3500;
+  const text = () => mergeSegments([...segments, ...session.filter(Boolean)]);
 
   rec.onresult = (e) => {
     let interim = "";
-    for (let i = e.resultIndex; i < e.results.length; i++) {
+    for (let i = 0; i < e.results.length; i++) {
       const r = e.results[i];
       if (r.isFinal) {
-        const now = Date.now();
-        const sep = !finalText ? "" : now - lastFinalAt > PAUSE_MS ? "\n\n" : " ";
-        finalText += sep + r[0].transcript.trim();
-        lastFinalAt = now;
+        if (!session[i]) {
+          const now = Date.now();
+          session[i] = { text: r[0].transcript, pause: now - lastFinalAt > PAUSE_MS };
+          lastFinalAt = now;
+        } else {
+          session[i].text = r[0].transcript;
+        }
+      } else if (i >= e.resultIndex) {
+        interim += r[0].transcript;
       }
-      else interim += r[0].transcript;
     }
-    onText(finalText, interim);
+    onText(text(), interim);
   };
   rec.onerror = (e) => {
     if (e.error !== "no-speech" && e.error !== "aborted") onError?.(e.error);
   };
-  // Browsers end long sessions on their own. Keep listening until the author stops.
+  // Browsers end sessions on their own. Keep what was heard and keep listening until stopped.
   rec.onend = () => {
+    segments.push(...session.filter(Boolean));
+    session = [];
     if (!stopped) {
       try {
         rec.start();
@@ -48,7 +87,7 @@ export function startDictation({ onText, onEnd, onError, lang = "en-US" }) {
         /* fall through */
       }
     }
-    onEnd?.(finalText);
+    onEnd?.(text());
   };
   rec.start();
 
