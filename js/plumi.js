@@ -135,3 +135,21 @@ export function lightTidy(text) {
   }
   return t;
 }
+
+const CUE = /\b(?:new|next|another)\s+(?:note|idea|thought|section|scene)\b[.,:;!]?/gi;
+
+/**
+ * Split a dictation without AI: on spoken cues ("new note", "next idea") and on blank lines
+ * (dictation pauses become blank lines). Words are never changed, only cues are removed.
+ */
+export function ruleSplit(text) {
+  return String(text || "")
+    .replace(CUE, "\n\n")
+    .split(/\n\s*\n/)
+    .map((s) => s.replace(/\s+/g, " ").trim().replace(/^[.,;:]\s*/, ""))
+    .filter((s) => s.length > 0);
+}
+
+export function wordCount(text) {
+  return (String(text || "").match(/[\p{L}\p{N}'-]+/gu) || []).length;
+}

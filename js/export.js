@@ -1,6 +1,6 @@
 // Export a book as Markdown (Scrivener imports it), Word, or PDF (print). Plus a full JSON backup.
 
-function download(name, content, type) {
+export function download(name, content, type) {
   const blob = new Blob([content], { type });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -16,9 +16,12 @@ const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(
 const esc = (s) =>
   String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
+/** Notes keep the order the author sets, falling back to when they were written. */
+export const sortKey = (f) => (typeof f.order === "number" ? f.order : f.createdAt);
+
 /** Group a book's fragments by chapter, oldest first, unsorted notes last. */
 export function bookSections(book, fragments) {
-  const mine = fragments.filter((f) => f.bookId === book.id).sort((a, b) => a.createdAt - b.createdAt);
+  const mine = fragments.filter((f) => f.bookId === book.id).sort((a, b) => sortKey(a) - sortKey(b));
   const sections = (book.chapters || []).map((ch) => ({
     title: ch.title,
     items: mine.filter((f) => f.chapterId === ch.id),

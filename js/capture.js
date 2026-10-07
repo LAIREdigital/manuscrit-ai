@@ -17,12 +17,20 @@ export function startDictation({ onText, onEnd, onError, lang = "en-US" }) {
 
   let finalText = "";
   let stopped = false;
+  let lastFinalAt = Date.now();
+  // A pause longer than this starts a new paragraph, which the splitter treats as a new note.
+  const PAUSE_MS = 3500;
 
   rec.onresult = (e) => {
     let interim = "";
     for (let i = e.resultIndex; i < e.results.length; i++) {
       const r = e.results[i];
-      if (r.isFinal) finalText += (finalText ? " " : "") + r[0].transcript.trim();
+      if (r.isFinal) {
+        const now = Date.now();
+        const sep = !finalText ? "" : now - lastFinalAt > PAUSE_MS ? "\n\n" : " ";
+        finalText += sep + r[0].transcript.trim();
+        lastFinalAt = now;
+      }
       else interim += r[0].transcript;
     }
     onText(finalText, interim);

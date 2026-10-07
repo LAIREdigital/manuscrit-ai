@@ -8,27 +8,44 @@ Live: https://lairedigital.github.io/manuscrit-ai/
 
 ## What works today
 
-- **Capture:** dictate in the browser (Chrome, Edge, Safari), type, or drop a screenshot or photo and
-  pull its text with OCR (Tesseract.js, runs on the device).
-- **Plumi sorting:** every note gets a suggested book and chapter from the book and chapter keywords,
-  explicit tags like `#booktitle`, and the notes already filed in each book. One click files it, or
-  "File all" clears the Inbox.
-- **Books and chapters:** create books, chapters and keywords. Capturing while a book or chapter is open
-  files the note there directly.
-- **Two modes:**
-  - *Mode Authentique:* exact words only. No rewriting, ever.
-  - *Mode Assisté:* ask Lumière for suggested edits. The author chooses. The original is always kept and
-    can be restored.
-- **Search** across every note, accent insensitive.
-- **Export** a book as Markdown (imports into Scrivener), Word, or PDF (print). Full JSON backup and restore.
-- **Optional Claude:** paste an Anthropic API key in Settings and Plumi sorts with Claude, adds topic
-  tags, and Mode Assisté gives real edit suggestions. Without a key everything still works on keywords.
+- **Guidance built in:** a short welcome tour on first visit, small tips that can be dismissed, and a
+  Help panel (the ? button) with a **system check** that tests storage, the mic, the screenshot reader and
+  every AI key.
+- **Capture:** dictate in the browser (Chrome, Edge, Safari), type, or add a screenshot and pull its text
+  with on-device OCR. A pause of a few seconds, or saying "new note", starts a new idea.
+- **Split preview:** long or multi-part captures open a preview. Edit, join or remove pieces and pick a
+  place for each, then save. With an AI key, "Split smarter" splits by meaning and is checked to keep the
+  author's exact words.
+- **Plumi sorting:** every note gets a suggested book and chapter. The author confirms. Works on keywords
+  with no AI, smarter with a key.
+- **Shape chapters:** move notes up and down, tick several and merge them, and a **Read** tab shows a
+  chapter or book as continuous prose with word counts.
+- **Two modes:** Authentique keeps exact words. Assisté suggests edits the author approves, original kept.
+- **Lumière research:** per book, summarize chapters, check continuity, find themes, find gaps, or ask a
+  question. Answers come only from the author's notes.
+- **Search, export** (Markdown for Scrivener, Word, PDF), **backup and restore**, with a weekly backup reminder.
+
+## Free AI keys (optional)
+
+Settings has a slot for each free provider and a picker for which one does each job:
+
+| Provider | Default model | Good for |
+| --- | --- | --- |
+| Groq | `openai/gpt-oss-120b` | Sorting, splitting (fast) |
+| Cerebras | `gpt-oss-120b` | Edit suggestions, backup for Groq |
+| Google Gemini | `gemini-2.5-flash` | Lumière research on whole books |
+| OpenRouter | `google/gemma-4-31b-it:free` | Any `:free` model |
+| Mistral | `mistral-small-latest` | Extra fallback |
+
+If a job's provider has no key, the app uses the first provider that has one.
+**Load keys from file** reads a JSON file saved by the app, `provider: key` lines, or a notes file that
+contains keys. **Keys are never in this repo or on the site.** They are saved only in the browser that
+loaded them and sent only to that provider. Keep the keys file private.
 
 ## Privacy
 
 There is no server. Books and notes live in the browser's local storage on the device that wrote them.
-The optional API key is stored on that device and sent only to `api.anthropic.com`. Use
-**Settings > Download backup** to move work between devices.
+Backups contain writing only, never keys.
 
 ## Run locally
 
@@ -48,11 +65,11 @@ No build step. Plain HTML, CSS and ES modules.
 | `css/styles.css` | Navy and gold editorial theme, phone layout |
 | `js/app.js` | UI, views, events |
 | `js/plumi.js` | Keyword sorting, search, light tidy (pure, tested) |
-| `js/ai.js` | Optional Claude sorting and edit suggestions |
+| `js/ai.js` | Free AI providers, key file import, sort, split, edit and research calls |
 | `js/capture.js` | Dictation and OCR |
 | `js/export.js` | Markdown, Word, PDF, backup |
 | `js/store.js` | Local storage |
 
 ## Not in the MVP yet
 
-Accounts and sync, native iOS app, Écho character, Lumière research and citations, pricing tiers.
+Accounts and sync, native iOS app, the Écho character, citations and outside research, pricing tiers.

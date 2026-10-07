@@ -146,6 +146,88 @@ dialog legend { font-weight: 600; padding: 0 6px; }
 }
 .toast.show { opacity: 1; transform: translateX(-50%); }
 
+
+/* Guidance */
+.tip, .tip-static, .banner, .mergebar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  border-radius: 10px; padding: 10px 12px; margin-bottom: 14px; font-size: 14px;
+}
+.tip { background: #eef1f8; border: 1px solid #d6dcec; color: var(--navy); }
+.tip span { flex: 1; min-width: 200px; }
+.tip-x { border: 1px solid #c7cfe4; background: #fff; border-radius: 8px; padding: 4px 10px; font-size: 13px; }
+.tip-static { background: #eef1f8; border: 1px solid #d6dcec; display: block; }
+.banner { background: #fbf5e0; border: 1px solid #ecdca4; }
+.mergebar { background: var(--navy); color: #fff; position: sticky; top: 64px; z-index: 5; }
+.mergebar button.ghost { color: #fff; border-color: #43507a; }
+.help-btn { font: 600 18px/1 var(--sans); width: 34px; height: 34px; }
+.count.ok { background: #d9eadf; color: var(--ok); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* Cards: select and edit */
+.frag { position: relative; padding-left: 44px; }
+.frag.picked { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-soft); }
+.pick { position: absolute; left: 14px; top: 16px; }
+.pick input { width: 18px; height: 18px; accent-color: var(--navy); cursor: pointer; }
+.frag-edit { width: 100%; font: 500 19px/1.5 var(--serif); border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+.frag-actions.end { justify-content: flex-end; margin-top: 14px; }
+
+/* Split preview */
+.split { background: var(--card); border: 2px solid var(--gold); border-radius: var(--radius); padding: 16px; }
+.split h2 { font: 600 26px/1.2 var(--serif); color: var(--navy); margin: 0; }
+.piece { border: 1px solid var(--line); border-radius: 10px; padding: 10px; margin-top: 10px; }
+.piece textarea { width: 100%; border: 0; outline: none; resize: vertical; font: 500 18px/1.5 var(--serif); }
+
+/* Book tabs, reading, Lumiere */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
+.tabs button { border: 0; background: none; padding: 8px 14px; border-bottom: 2px solid transparent; color: var(--muted); font-weight: 500; }
+.tabs button.on { color: var(--navy); border-bottom-color: var(--gold); }
+details.menu { position: relative; }
+details.menu summary { list-style: none; border-radius: 8px; padding: 7px 14px; border: 1px solid var(--line); background: transparent; }
+details.menu summary::-webkit-details-marker { display: none; }
+details.menu > div { position: absolute; right: 0; top: 110%; z-index: 10; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 6px; display: grid; min-width: 190px; box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+details.menu > div button { border: 0; background: none; text-align: left; padding: 8px 10px; border-radius: 6px; }
+details.menu > div button:hover { background: #f4efe1; }
+.manuscript { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 32px clamp(16px, 5vw, 56px); font: 500 20px/1.75 var(--serif); }
+.manuscript h2 { font: 600 28px/1.2 var(--serif); color: var(--navy); margin: 28px 0 12px; }
+.manuscript h2:first-child { margin-top: 0; }
+.manuscript h2 small { font: 400 12px var(--sans); color: var(--muted); margin-left: 8px; }
+.manuscript p { margin: 0 0 1em; text-indent: 1.5em; }
+.lumiere .row-buttons { margin: 12px 0; }
+.ask-row { display: flex; gap: 8px; }
+.ask-row input { flex: 1; min-width: 0; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: #fff; }
+.answer { background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 0 10px 10px 0; padding: 14px 16px; margin-top: 14px; }
+.answer p { margin: 8px 0; }
+
+/* Settings, help, tour */
+dialog.wide { width: min(680px, calc(100vw - 32px)); }
+dialog form { max-height: calc(100vh - 40px); overflow-y: auto; }
+.provider { border-top: 1px solid var(--line); padding-top: 10px; }
+.provider:first-child { border-top: 0; }
+.provider-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; }
+.provider-head a { font-size: 13px; color: var(--navy-2); }
+.provider p { margin: 2px 0 6px; }
+.provider-fields { display: grid; grid-template-columns: 1.4fr 1fr auto; gap: 6px; }
+.status { margin-left: auto; font-size: 12px; color: var(--muted); }
+.status.ok { color: var(--ok); font-weight: 600; }
+.status.bad { color: var(--danger); }
+.task-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.task-grid small { display: block; }
+.help-steps { padding-left: 20px; margin: 0; display: grid; gap: 8px; }
+dialog h3 { margin: 6px 0 0; font: 600 20px/1.2 var(--serif); color: var(--navy); }
+.checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.checks li { padding: 8px 10px 8px 30px; border-radius: 8px; background: #f6f3ea; position: relative; font-size: 14px; }
+.checks li::before { content: ""; position: absolute; left: 11px; top: 13px; width: 10px; height: 10px; border-radius: 50%; background: #bbb; }
+.checks li.ok::before { background: var(--ok); }
+.checks li.warn::before { background: var(--gold); }
+.checks li.bad::before { background: var(--danger); }
+.tour { padding: 24px; display: grid; gap: 12px; text-align: center; }
+.tour h2 { margin: 0; font: 600 30px/1.2 var(--serif); color: var(--navy); }
+.tour p { margin: 0; font-size: 16px; color: var(--ink); }
+.tour-art { color: var(--gold); width: 56px; height: 56px; margin: 0 auto; }
+.tour-dots { display: flex; gap: 6px; justify-content: center; }
+.tour-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.tour-dots span.on { background: var(--gold); }
+
 /* Phone */
 @media (max-width: 760px) {
   .menu-btn { display: grid; }
@@ -157,10 +239,13 @@ dialog legend { font-weight: 600; padding: 0 6px; }
   .nav.open { transform: none; }
   .main { padding: 16px; }
   .topbar { gap: 8px; padding: 10px 12px; }
-  .topbar .settings-btn { display: none; }
+  .topbar .settings-btn, .topbar .help-btn { display: none; }
   .feather { width: 24px; height: 24px; }
   .brand { gap: 6px; }
   .brand span { font-size: 19px; }
   .mode button { padding: 4px 8px; font-size: 11px; }
   .view-head h1 { font-size: 28px; }
+  .provider-fields, .task-grid { grid-template-columns: 1fr; }
+  .mergebar { top: 60px; }
+  .help-btn { width: 30px; }
 }

@@ -47,20 +47,44 @@ export function save(state) {
   }
 }
 
-export function loadSettings() {
+const KEYS_KEY = "manuscrit.keys.v1";
+
+const read = (k, fallback) => {
   try {
-    return { apiKey: "", model: "claude-opus-5-5", ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") };
+    return { ...fallback, ...JSON.parse(localStorage.getItem(k) || "{}") };
   } catch {
-    return { apiKey: "", model: "claude-opus-5-5" };
+    return { ...fallback };
   }
+};
+const write = (k, v) => {
+  try {
+    localStorage.setItem(k, JSON.stringify(v));
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+/** Preferences: which provider runs each task, models, tips seen, backup dates. */
+export function loadSettings(defaults) {
+  const s = read(SETTINGS_KEY, { models: {}, tasks: { ...defaults }, tips: {}, toured: false, lastBackup: 0, backupSnooze: 0 });
+  s.tasks = { ...defaults, ...(s.tasks || {}) };
+  delete s.apiKey;
+  delete s.model;
+  return s;
 }
 
-export function saveSettings(settings) {
-  try {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-  } catch {
-    /* ignore */
-  }
+export const saveSettings = (s) => write(SETTINGS_KEY, s);
+
+/** API keys are kept apart from everything else and never go into backups. */
+export const loadKeys = () => read(KEYS_KEY, {});
+export const saveKeys = (k) => write(KEYS_KEY, k);
+
+/** Rough size of what this app keeps in the browser, in KB. */
+export function storageKb() {
+  let n = 0;
+  for (const k of [KEY, SETTINGS_KEY, KEYS_KEY]) n += (localStorage.getItem(k) || "").length;
+  return Math.round((n * 2) / 1024);
 }
 
 export function importBackup(json) {

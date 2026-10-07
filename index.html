@@ -27,6 +27,7 @@
       <button data-action="mode" data-mode="authentique" title="Your exact words. Nothing is ever rewritten.">Authentique</button>
       <button data-action="mode" data-mode="assiste" title="Optional suggestions you approve.">Assist&eacute;</button>
     </div>
+    <button class="icon-btn help-btn" data-action="open-help" aria-label="Help">?</button>
     <button class="icon-btn settings-btn" data-action="open-settings" aria-label="Settings">
       <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </button>
@@ -54,25 +55,31 @@
     </form>
   </dialog>
 
-  <dialog id="settings-dialog">
+  <dialog id="settings-dialog" class="wide">
     <form method="dialog" id="settings-form">
       <h2>Settings</h2>
-      <p class="muted">Your writing is stored only in this browser. Back it up often.</p>
+      <div class="tip-static">
+        <strong>AI is optional.</strong> Without keys, Plumi sorts by keywords and splits dictation on pauses and
+        cue words. Free keys make sorting smarter and unlock Lumi&egrave;re research.
+        Keys stay in this browser only. They are never sent anywhere except the provider you pick.
+      </div>
       <fieldset>
-        <legend>Claude (optional)</legend>
-        <p class="muted small">Paste your own Anthropic API key to let Plumi sort with Claude and to get Assist&eacute; suggestions.
-          The key stays on this device and is sent only to api.anthropic.com. Without a key, Plumi sorts by keywords.</p>
-        <label>API key <input name="apiKey" type="password" autocomplete="off" placeholder="sk-ant-..."></label>
-        <label>Model
-          <select name="model">
-            <option value="claude-opus-5-5">Claude Opus 5.5 (best)</option>
-            <option value="claude-sonnet-5-5">Claude Sonnet 5.5 (faster, cheaper)</option>
-            <option value="claude-haiku-4-5">Claude Haiku 4.5 (cheapest)</option>
-          </select>
-        </label>
+        <legend>Free AI keys</legend>
+        <div class="row-buttons">
+          <label class="button-like">Load keys from file <input type="file" accept=".json,.txt,.md,text/*" id="keys-input" hidden></label>
+          <button type="button" data-action="download-keys">Save keys to a file</button>
+          <button type="button" data-action="test-all">Test all</button>
+        </div>
+        <p class="muted small">Keep the keys file somewhere private. Load it on a new phone or laptop to set up in one step.</p>
+        <div id="provider-rows"></div>
       </fieldset>
       <fieldset>
-        <legend>Your data</legend>
+        <legend>Which AI does each job</legend>
+        <div id="task-rows" class="task-grid"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Your writing</legend>
+        <p class="muted small" id="backup-status"></p>
         <div class="row-buttons">
           <button type="button" data-action="backup">Download backup</button>
           <label class="button-like">Restore backup <input type="file" accept="application/json" id="restore-input" hidden></label>
@@ -85,6 +92,53 @@
         <button value="save" class="primary">Save</button>
       </div>
     </form>
+  </dialog>
+
+  <dialog id="help-dialog" class="wide">
+    <form method="dialog">
+      <h2>How Manuscrit works</h2>
+      <ol class="help-steps">
+        <li><strong>Capture.</strong> Tap <em>Dictate</em> and talk, type, or add a screenshot. Pause for a few
+          seconds or say <em>"new note"</em> to start a separate note. Press Ctrl or Cmd + Enter to save.</li>
+        <li><strong>Plumi sorts.</strong> New notes land in the Inbox with a suggested book and chapter.
+          Tap <em>File it</em>, or pick another place. Nothing moves without you.</li>
+        <li><strong>Teach Plumi.</strong> Give each book and chapter a few keywords in <em>Edit book</em>.
+          Add <em>#booktitle</em> to a note to send it straight there.</li>
+        <li><strong>Shape it.</strong> In a chapter, move notes up and down, tick several and <em>Merge</em>
+          them, or tap <em>Read</em> to see the chapter as continuous prose with word counts.</li>
+        <li><strong>Two modes.</strong> <em>Authentique</em> keeps your exact words. <em>Assist&eacute;</em>
+          offers edits you approve, and your original is always kept.</li>
+        <li><strong>Ask Lumi&egrave;re.</strong> On a book page, Lumi&egrave;re can summarize chapters, check
+          continuity, find themes and answer questions about your own notes. Needs a free AI key.</li>
+        <li><strong>Back up.</strong> Everything lives in this browser. Download a backup each week, and to
+          move to another device.</li>
+      </ol>
+      <h3>System check</h3>
+      <p class="muted small">Run this when something seems off. It tests your mic, storage, the screenshot reader and each AI key.</p>
+      <button type="button" class="primary" data-action="run-check">Run system check</button>
+      <ul id="check-results" class="checks"></ul>
+      <div class="dialog-actions">
+        <button type="button" class="ghost" data-action="replay-tour">Replay welcome tour</button>
+        <span class="spacer"></span>
+        <button value="close" class="primary">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="tour-dialog">
+    <div class="tour">
+      <div class="tour-art" aria-hidden="true">
+        <svg viewBox="0 0 64 64"><path d="M50 6C30 10 16 26 14 54l5-3c1-6 3-11 6-16l9 1-6-4c3-5 7-9 11-13l8 1-6-4c3-3 6-6 9-10z" fill="currentColor"/></svg>
+      </div>
+      <div id="tour-body"></div>
+      <div class="tour-dots" id="tour-dots"></div>
+      <div class="dialog-actions">
+        <button type="button" class="ghost" data-action="tour-skip">Skip</button>
+        <span class="spacer"></span>
+        <button type="button" class="ghost" data-action="tour-back" id="tour-back">Back</button>
+        <button type="button" class="primary" data-action="tour-next" id="tour-next">Next</button>
+      </div>
+    </div>
   </dialog>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>

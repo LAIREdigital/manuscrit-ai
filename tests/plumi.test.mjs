@@ -65,3 +65,18 @@ test("lightTidy keeps words, fixes case and ending", () => {
 test("lightTidy ends questions with a question mark", () => {
   assert.equal(lightTidy("what should the price be"), "What should the price be?");
 });
+
+import { ruleSplit, wordCount } from "../js/plumi.js";
+
+test("ruleSplit splits on cue words and pauses, keeps words", () => {
+  const parts = ruleSplit("The garden was cold. New note. Pricing should be simple\n\nI miss my grandmother next idea the launch date");
+  assert.deepEqual(parts, ["The garden was cold.", "Pricing should be simple", "I miss my grandmother", "the launch date"]);
+});
+
+test("ruleSplit leaves a single thought alone", () => {
+  assert.deepEqual(ruleSplit("Just one line"), ["Just one line"]);
+});
+
+test("wordCount counts words", () => {
+  assert.equal(wordCount("Lumière lights the way, doesn't it?"), 6);
+});
