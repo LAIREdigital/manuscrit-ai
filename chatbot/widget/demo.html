@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LAIRE Chat Demo</title>
+<style>body{font-family:system-ui,sans-serif;max-width:640px;margin:40px auto;padding:0 16px;color:#1b1b1b;background:#fff}</style>
+</head>
+<body>
+<h1>LAIRE chat widget demo</h1>
+<p>The bubble bottom right is the widget. Set <code>data-api</code> to the deployed Worker URL, or run <code>npx wrangler dev</code> in <code>chatbot/worker</code> and use <code>http://localhost:8787</code>.</p>
+<script src="widget.js" data-site="laire-demo" data-api="http://localhost:8787" async></script>
+</body>
+</html>

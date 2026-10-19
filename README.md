@@ -71,3 +71,8 @@ No build step. Plain HTML, CSS and ES modules.
 ## Not in the MVP yet
 
 Accounts and sync, native iOS app, the Écho character, citations and outside research, pricing tiers.
+
+## Also in this repo
+
+`chatbot/` holds the LAIRE website chatbot, a separate product that reuses the same free AI providers. See
+`chatbot/README.md`.

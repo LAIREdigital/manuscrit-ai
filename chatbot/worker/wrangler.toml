@@ -1,0 +1,8 @@
+name = "laire-chat"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+# Secrets (set once, never commit):
+#   npx wrangler secret put GROQ_KEY
+#   npx wrangler secret put CEREBRAS_KEY
+#   npx wrangler secret put OPENROUTER_KEY
