@@ -151,5 +151,5 @@ test("every registered client has the required config", () => {
 });
 
 test("replies lose em and en dashes", () => {
-  assert.equal(readReply("Yes – we do. Fast—really. Non‑stop").reply, "Yes, we do. Fast, really. Non-stop");
+  assert.equal(readReply("Yes \u2013 we do. Fast\u2014really. Non\u2011stop").reply, "Yes, we do. Fast, really. Non-stop");
 });
