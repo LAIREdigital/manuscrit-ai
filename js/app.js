@@ -2,6 +2,7 @@ import { load, save, loadSettings, saveSettings, loadKeys, saveKeys, importBacku
 import { suggest, search, lightTidy, ruleSplit, wordCount } from "./plumi.js";
 import { PROVIDERS, TASKS, DEFAULT_TASKS, RESEARCH, aiSort, aiSplit, aiAssist, aiResearch, testProvider, parseKeysFile } from "./ai.js";
 import { speechSupported, startDictation, ocrImage } from "./capture.js";
+import { currentUser, changePassword, signOut } from "./auth.js";
 import { exportMarkdown, exportWord, exportPdf, exportBackup, bookSections, sortKey, download } from "./export.js";
 
 let state = load();
@@ -724,6 +725,7 @@ function renderSettings() {
     tasks += `<label>${t.name}<small>${t.help}</small><select name="task-${id}">${opts}</select></label>`;
   }
   $("#task-rows").innerHTML = tasks;
+  $("#account-email").textContent = currentUser(localStorage) || "";
   $("#backup-status").textContent = `${state.fragments.length} notes in ${state.books.length} books, about ${storageKb()} KB. ${
     settings.lastBackup ? `Last backup ${new Date(settings.lastBackup).toLocaleString()}.` : "Never backed up."
   }`;
@@ -996,6 +998,20 @@ document.addEventListener("click", async (e) => {
       settings.backupSnooze = Date.now() + DAY;
       persistSettings();
       render();
+      break;
+    case "change-password": {
+      const cur = $("#pw-current"), next = $("#pw-new");
+      changePassword(localStorage, currentUser(localStorage), cur.value, next.value)
+        .then(() => {
+          cur.value = next.value = "";
+          toast("Password changed.");
+        })
+        .catch((e) => toast(e.message));
+      break;
+    }
+    case "sign-out":
+      signOut(localStorage);
+      location.reload();
       break;
     case "reset":
       if (confirm("Erase every book and note in this browser? Download a backup first if unsure.")) {
