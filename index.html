@@ -12,6 +12,17 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <div id="login-screen" class="login-screen">
+    <form id="login-form" class="login-card">
+      <h1>Manuscrit<em>.AI</em></h1>
+      <p class="muted small">Sign in with your LAIRE Digital email.</p>
+      <label>Email <input name="email" type="email" autocomplete="username" required></label>
+      <label>Password <input name="password" type="password" autocomplete="current-password" required></label>
+      <p class="login-error" id="login-error" role="alert"></p>
+      <button class="primary">Sign in</button>
+      <p class="muted small">First time? Your password is <strong>password</strong>. Change it in Settings.</p>
+    </form>
+  </div>
   <header class="topbar">
     <button class="icon-btn menu-btn" data-action="toggle-nav" aria-label="Open books">
       <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -76,6 +87,16 @@
       <fieldset>
         <legend>Which AI does each job</legend>
         <div id="task-rows" class="task-grid"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Account</legend>
+        <p class="muted small">Signed in as <strong id="account-email"></strong></p>
+        <div class="provider-fields">
+          <input type="password" id="pw-current" autocomplete="current-password" placeholder="Current password" aria-label="Current password">
+          <input type="password" id="pw-new" autocomplete="new-password" placeholder="New password (8+ characters)" aria-label="New password">
+          <button type="button" data-action="change-password">Change password</button>
+        </div>
+        <div class="row-buttons"><button type="button" class="ghost" data-action="sign-out">Sign out</button></div>
       </fieldset>
       <fieldset>
         <legend>Your writing</legend>
@@ -143,6 +164,6 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/login.js"></script>
 </body>
 </html>

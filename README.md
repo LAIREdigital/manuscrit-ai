@@ -8,6 +8,10 @@ Live: https://lairedigital.github.io/manuscrit-ai/
 
 ## What works today
 
+- **Sign in:** only `@lairedigital.com` emails. First password is `password`. Change it in Settings,
+  Account. Passwords are stored hashed in the browser. There is no server, so each browser keeps its own
+  accounts: on a new device, sign in with `password` again.
+
 - **Guidance built in:** a short welcome tour on first visit, small tips that can be dismissed, and a
   Help panel (the ? button) with a **system check** that tests storage, the mic, the screenshot reader and
   every AI key.
