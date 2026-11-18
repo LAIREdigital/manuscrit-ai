@@ -7,7 +7,7 @@
 // This page never reads or writes any tool's own storage (for example the manuscrit.* keys).
 // Everything here lives under the "laire.toolkit." prefix.
 
-import { TOOLS } from "./tools.js?v=202611182036";
+import { TOOLS } from "./tools.js?v=202611182043";
 
 const PIN_HASH = "422fe0e6128a73a02469c4c804464aaa003b23bbfb87e5f797399105b1c9f613";
 const UNLOCK_KEY = "laire.toolkit.unlocked";
