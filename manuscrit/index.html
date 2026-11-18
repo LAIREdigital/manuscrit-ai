@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manuscrit.AI</title>
+  <meta name="description" content="The second brain for authors. Capture scattered ideas by voice, text or screenshot and let Plumi file them into your books.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101c3d'/%3E%3Cpath d='M46 10C30 14 20 28 18 50l4-2c2-14 10-26 24-38z' fill='%23d4af37'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="login-screen" class="login-screen">
+    <form id="login-form" class="login-card">
+      <h1>Manuscrit<em>.AI</em></h1>
+      <p class="muted small">Sign in with your LAIRE Digital email.</p>
+      <label>Email <input name="email" type="email" autocomplete="username" required></label>
+      <label>Password <input name="password" type="password" autocomplete="current-password" required></label>
+      <p class="login-error" id="login-error" role="alert"></p>
+      <button class="primary">Sign in</button>
+      <p class="muted small">First time? Your password is <strong>password</strong>. Change it in Settings.</p>
+    </form>
+  </div>
+  <header class="topbar">
+    <button class="icon-btn menu-btn" data-action="toggle-nav" aria-label="Open books">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <a class="brand" href="./" aria-label="Manuscrit.AI home">
+      <svg class="feather" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M50 6C30 10 16 26 14 54l5-3c1-6 3-11 6-16l9 1-6-4c3-5 7-9 11-13l8 1-6-4c3-3 6-6 9-10z" fill="currentColor"/>
+        <path d="M14 54 44 16" stroke="var(--navy)" stroke-width="1.5" fill="none"/>
+      </svg>
+      <span>Manuscrit<em>.AI</em></span>
+    </a>
+    <div class="mode" role="group" aria-label="Writing mode">
+      <button data-action="mode" data-mode="authentique" title="Your exact words. Nothing is ever rewritten.">Authentique</button>
+      <button data-action="mode" data-mode="assiste" title="Optional suggestions you approve.">Assist&eacute;</button>
+    </div>
+    <button class="icon-btn help-btn" data-action="open-help" aria-label="Help">?</button>
+    <button class="icon-btn settings-btn" data-action="open-settings" aria-label="Settings">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </header>
+
+  <div class="layout">
+    <nav id="nav" class="nav" aria-label="Books"></nav>
+    <main id="main" class="main"></main>
+  </div>
+
+  <dialog id="book-dialog">
+    <form method="dialog" id="book-form">
+      <h2 id="book-dialog-title">Book</h2>
+      <label>Title <input name="title" required maxlength="120"></label>
+      <label>Keywords <small>comma separated. Plumi uses these to file notes.</small>
+        <input name="keywords" placeholder="garden, grandmother, roses"></label>
+      <label>Chapters <small>one per line. Optional keywords after a colon.</small>
+        <textarea name="chapters" rows="6" placeholder="Spring: seeds, planting&#10;Winter: frost, snow"></textarea></label>
+      <div class="dialog-actions">
+        <button type="button" class="danger ghost" data-action="delete-book" id="delete-book-btn">Delete book</button>
+        <span class="spacer"></span>
+        <button value="cancel" class="ghost" formnovalidate>Cancel</button>
+        <button value="save" class="primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="settings-dialog" class="wide">
+    <form method="dialog" id="settings-form">
+      <h2>Settings</h2>
+      <div class="tip-static">
+        <strong>AI is optional.</strong> Without keys, Plumi sorts by keywords and splits dictation on pauses and
+        cue words. Free keys make sorting smarter and unlock Lumi&egrave;re research.
+        Keys stay in this browser only. They are never sent anywhere except the provider you pick.
+      </div>
+      <fieldset>
+        <legend>Free AI keys</legend>
+        <div class="row-buttons">
+          <label class="button-like">Load keys from file <input type="file" accept=".json,.txt,.md,text/*" id="keys-input" hidden></label>
+          <button type="button" data-action="download-keys">Save keys to a file</button>
+          <button type="button" data-action="test-all">Test all</button>
+        </div>
+        <p class="muted small">Keep the keys file somewhere private. Load it on a new phone or laptop to set up in one step.</p>
+        <div id="provider-rows"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Which AI does each job</legend>
+        <div id="task-rows" class="task-grid"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Account</legend>
+        <p class="muted small">Signed in as <strong id="account-email"></strong></p>
+        <div class="provider-fields">
+          <input type="password" id="pw-current" autocomplete="current-password" placeholder="Current password" aria-label="Current password">
+          <input type="password" id="pw-new" autocomplete="new-password" placeholder="New password (8+ characters)" aria-label="New password">
+          <button type="button" data-action="change-password">Change password</button>
+        </div>
+        <div class="row-buttons"><button type="button" class="ghost" data-action="sign-out">Sign out</button></div>
+      </fieldset>
+      <fieldset>
+        <legend>Your writing</legend>
+        <p class="muted small" id="backup-status"></p>
+        <div class="row-buttons">
+          <button type="button" data-action="backup">Download backup</button>
+          <label class="button-like">Restore backup <input type="file" accept="application/json" id="restore-input" hidden></label>
+          <button type="button" class="danger ghost" data-action="reset">Erase everything</button>
+        </div>
+      </fieldset>
+      <div class="dialog-actions">
+        <span class="spacer"></span>
+        <button value="cancel" class="ghost" formnovalidate>Close</button>
+        <button value="save" class="primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="help-dialog" class="wide">
+    <form method="dialog">
+      <h2>How Manuscrit works</h2>
+      <ol class="help-steps">
+        <li><strong>Capture.</strong> Tap <em>Dictate</em> and talk, type, or add a screenshot. Pause for a few
+          seconds or say <em>"new note"</em> to start a separate note. Press Ctrl or Cmd + Enter to save.</li>
+        <li><strong>Plumi sorts.</strong> New notes land in the Inbox with a suggested book and chapter.
+          Tap <em>File it</em>, or pick another place. Nothing moves without you.</li>
+        <li><strong>Teach Plumi.</strong> Give each book and chapter a few keywords in <em>Edit book</em>.
+          Add <em>#booktitle</em> to a note to send it straight there.</li>
+        <li><strong>Shape it.</strong> In a chapter, move notes up and down, tick several and <em>Merge</em>
+          them, or tap <em>Read</em> to see the chapter as continuous prose with word counts.</li>
+        <li><strong>Two modes.</strong> <em>Authentique</em> keeps your exact words. <em>Assist&eacute;</em>
+          offers edits you approve, and your original is always kept.</li>
+        <li><strong>Ask Lumi&egrave;re.</strong> On a book page, Lumi&egrave;re can summarize chapters, check
+          continuity, find themes and answer questions about your own notes. Needs a free AI key.</li>
+        <li><strong>Back up.</strong> Everything lives in this browser. Download a backup each week, and to
+          move to another device.</li>
+      </ol>
+      <h3>System check</h3>
+      <p class="muted small">Run this when something seems off. It tests your mic, storage, the screenshot reader and each AI key.</p>
+      <button type="button" class="primary" data-action="run-check">Run system check</button>
+      <ul id="check-results" class="checks"></ul>
+      <div class="dialog-actions">
+        <button type="button" class="ghost" data-action="replay-tour">Replay welcome tour</button>
+        <span class="spacer"></span>
+        <button value="close" class="primary">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="tour-dialog">
+    <div class="tour">
+      <div class="tour-art" aria-hidden="true">
+        <svg viewBox="0 0 64 64"><path d="M50 6C30 10 16 26 14 54l5-3c1-6 3-11 6-16l9 1-6-4c3-5 7-9 11-13l8 1-6-4c3-3 6-6 9-10z" fill="currentColor"/></svg>
+      </div>
+      <div id="tour-body"></div>
+      <div class="tour-dots" id="tour-dots"></div>
+      <div class="dialog-actions">
+        <button type="button" class="ghost" data-action="tour-skip">Skip</button>
+        <span class="spacer"></span>
+        <button type="button" class="ghost" data-action="tour-back" id="tour-back">Back</button>
+        <button type="button" class="primary" data-action="tour-next" id="tour-next">Next</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/login.js"></script>
+</body>
+</html>

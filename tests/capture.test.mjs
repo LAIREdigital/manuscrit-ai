@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mergeSegments } from "../js/capture.js";
+import { mergeSegments } from "../manuscrit/js/capture.js";
 
 test("phone style growing results do not double", () => {
   const segs = [{ text: "I went" }, { text: "I went to the" }, { text: "I went to the store" }];

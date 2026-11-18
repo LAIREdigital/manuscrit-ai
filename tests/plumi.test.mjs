@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { suggest, search, lightTidy, tokenize } from "../js/plumi.js";
+import { suggest, search, lightTidy, tokenize } from "../manuscrit/js/plumi.js";
 
 const books = [
   {
@@ -66,7 +66,7 @@ test("lightTidy ends questions with a question mark", () => {
   assert.equal(lightTidy("what should the price be"), "What should the price be?");
 });
 
-import { ruleSplit, wordCount } from "../js/plumi.js";
+import { ruleSplit, wordCount } from "../manuscrit/js/plumi.js";
 
 test("ruleSplit splits on cue words and pauses, keeps words", () => {
   const parts = ruleSplit("The garden was cold. New note. Pricing should be simple\n\nI miss my grandmother next idea the launch date");
