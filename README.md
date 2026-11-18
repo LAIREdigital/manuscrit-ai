@@ -77,3 +77,7 @@ No build step. Plain HTML, CSS and ES modules.
 ## Not in the MVP yet
 
 Accounts and sync, native iOS app, the Écho character, citations and outside research, pricing tiers.
+
+Toolkit cache: toolkit.laire.ai sits behind Cloudflare and browsers keep files for 4 hours. After changing
+`toolkit/toolkit.css`, `toolkit/toolkit.js` or `toolkit/tools.js`, bump the `?v=` number in `index.html`
+(css and js) and in the `tools.js` import at the top of `toolkit/toolkit.js`, or people see a stale page.
