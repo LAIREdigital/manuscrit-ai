@@ -4,7 +4,9 @@ The second brain for authors. Capture ideas the way they arrive (voice, typing, 
 Plumi file each one into the right book and chapter. The author stays the author: nothing is rewritten
 unless the author asks and approves.
 
-Live: https://lairedigital.github.io/manuscrit-ai/
+Live: https://toolkit.laire.ai/manuscrit/ (the toolkit homepage is https://toolkit.laire.ai, PIN gated)
+
+Repo layout: `index.html` and `toolkit/` are the LAIRE Toolkit homepage (edit `toolkit/tools.js` to add a tool). The app lives in `manuscrit/`. Same domain, so browser data carries over. Data from the old github.io address: https://lairedigital.github.io/laire-agents/docs/manuscrit-rescue.html
 
 ## What works today
 
@@ -53,7 +55,7 @@ Backups contain writing only, never keys.
 
 ```
 python3 -m http.server 8080
-# open http://localhost:8080
+# open http://localhost:8080 (toolkit) or http://localhost:8080/manuscrit/
 npm test   # sorting and search unit tests, Node 20+
 ```
 

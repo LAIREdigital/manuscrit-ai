@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { parseKeysFile, parseJson } from "../js/ai.js";
+import { parseKeysFile, parseJson } from "../manuscrit/js/ai.js";
 
 const fake = (p, n) => p + "x".repeat(n);
 

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { signIn, changePassword, currentUser, signOut, validEmail } from "../js/auth.js";
+import { signIn, changePassword, currentUser, signOut, validEmail } from "../manuscrit/js/auth.js";
 
 const mem = () => {
   const m = new Map();
