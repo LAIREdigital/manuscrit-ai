@@ -43,26 +43,35 @@ function lock() {
 
 const STATUS = { live: "Live", slack: "In Slack", soon: "Coming soon" };
 
-function card(t) {
-  const by = t.owner ? `<p class="owner">By ${esc(t.owner)}</p>` : "";
+function owner(t) {
+  if (!t.owner) return "";
+  const img = t.photo
+    ? `<img class="avatar" src="toolkit/img/team/${esc(t.photo)}.jpg" alt="" loading="lazy">`
+    : `<img class="avatar mark" src="toolkit/img/a-mark.png" alt="">`;
+  return `<div class="owner">${img}<div><div class="owner-name">${esc(t.owner)}</div><div class="owner-role">Tool owner</div></div></div>`;
+}
+
+function card(t, i) {
   const tags = t.tags.map((x) => `<span class="tag">${esc(x)}</span>`).join("");
   const external = /^https?:/.test(t.url);
+  const link = t.status !== "soon" && t.url;
   let action;
-  if (t.status === "soon") action = `<span class="cta muted">Coming soon</span>`;
-  else if (!t.url) action = `<span class="cta muted">Link coming</span>`;
-  else action = `<a class="cta" href="${esc(t.url)}"${external ? ' target="_blank" rel="noopener"' : ""}>Open ${esc(t.name)}<span aria-hidden="true"> &rarr;</span></a>`;
-  return `<article class="tool ${t.status}${t.url ? "" : " nolink"}">
-    <div class="tool-head"><span class="status s-${t.status}">${STATUS[t.status]}</span></div>
-    <h2>${esc(t.name)}</h2>
-    ${by}
+  if (t.status === "soon") action = `<span class="pending">Coming soon</span>`;
+  else if (!t.url) action = `<span class="pending">Link coming</span>`;
+  else action = `<a class="btn btn-dune" href="${esc(t.url)}"${external ? ' target="_blank" rel="noopener"' : ""} aria-label="Open ${esc(t.name)}">Open<span aria-hidden="true">&rarr;</span></a>`;
+  return `<article class="tool ${t.status} b${i % 4}${link ? " has-link" : ""}">
+    <p class="eyebrow s-${t.status}">${STATUS[t.status]}</p>
+    <h2 class="display">${esc(t.name)}</h2>
     <p class="blurb">${esc(t.blurb)}</p>
     <div class="tags">${tags}</div>
-    ${action}
+    <div class="foot-row">${owner(t)}${action}</div>
   </article>`;
 }
 
 function render(filter) {
   const list = filter === "all" ? TOOLS : TOOLS.filter((t) => t.status === filter);
+  const live = TOOLS.filter((t) => t.status !== "soon").length;
+  $("#count").textContent = `${live} tools so far`;
   $("#grid").innerHTML = list.length ? list.map(card).join("") : `<p class="empty">Nothing here yet.</p>`;
   document.querySelectorAll(".chip").forEach((c) => c.classList.toggle("on", c.dataset.filter === filter));
 }
