@@ -259,3 +259,12 @@ body.locked > :not(.login-screen) { display: none; }
 .login-card label { display: grid; gap: 4px; }
 .login-card input { padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
 .login-error { color: #b42318; margin: 0; min-height: 1em; }
+
+/* One-time notice after notes move over from the old address */
+.migrate-notice {
+  position: fixed; left: 50%; top: 16px; transform: translateX(-50%); z-index: 100;
+  max-width: min(640px, calc(100vw - 32px)); display: flex; gap: 14px; align-items: center;
+  background: var(--navy); color: #fff; border: 2px solid var(--gold); border-radius: var(--radius);
+  padding: 12px 16px; font-size: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+}
+.migrate-notice button { flex: none; background: var(--gold); color: var(--navy); border: 0; border-radius: 8px; padding: 6px 14px; font-weight: 600; }
