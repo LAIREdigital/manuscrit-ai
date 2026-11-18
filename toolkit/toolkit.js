@@ -54,26 +54,27 @@ function owner(t) {
 function card(t, i) {
   const tags = t.tags.map((x) => `<span class="tag">${esc(x)}</span>`).join("");
   const external = /^https?:/.test(t.url);
-  const link = t.status !== "soon" && t.url;
   let action;
   if (t.status === "soon") action = `<span class="pending">Coming soon</span>`;
   else if (!t.url) action = `<span class="pending">Link coming</span>`;
-  else action = `<a class="btn btn-dune" href="${esc(t.url)}"${external ? ' target="_blank" rel="noopener"' : ""} aria-label="Open ${esc(t.name)}">Open<span aria-hidden="true">&rarr;</span></a>`;
-  return `<article class="tool ${t.status} b${i % 4}${link ? " has-link" : ""}">
-    <p class="eyebrow s-${t.status}">${STATUS[t.status]}</p>
-    <h2 class="display">${esc(t.name)}</h2>
+  else action = `<a class="btn sm" href="${esc(t.url)}"${external ? ' target="_blank" rel="noopener"' : ""} aria-label="Open ${esc(t.name)}">Open</a>`;
+  const n = String(i + 1).padStart(2, "0");
+  const badge = t.status === "slack" ? `<span class="pill">In Slack</span>` : `<span class="status">${STATUS[t.status]}</span>`;
+  return `<article class="tool ${t.status}">
+    <div class="tool-top"><span class="num">${n}</span>${badge}</div>
+    <h3>${esc(t.name)}</h3>
     <p class="blurb">${esc(t.blurb)}</p>
     <div class="tags">${tags}</div>
-    <div class="foot-row">${owner(t)}${action}</div>
+    <div class="tool-foot">${owner(t)}${action}</div>
   </article>`;
 }
 
 function render(filter) {
   const list = filter === "all" ? TOOLS : TOOLS.filter((t) => t.status === filter);
   const live = TOOLS.filter((t) => t.status !== "soon").length;
-  $("#count").textContent = `${live} tools so far`;
+  $("#count").textContent = `${live} tools so far, and more on the way.`;
   $("#grid").innerHTML = list.length ? list.map(card).join("") : `<p class="empty">Nothing here yet.</p>`;
-  document.querySelectorAll(".chip").forEach((c) => c.classList.toggle("on", c.dataset.filter === filter));
+  document.querySelectorAll(".tab").forEach((c) => c.classList.toggle("on", c.dataset.filter === filter));
 }
 
 $("#pin-form").addEventListener("submit", async (e) => {
@@ -90,8 +91,8 @@ $("#pin-form").addEventListener("submit", async (e) => {
 });
 
 $("#lock").addEventListener("click", lock);
-document.querySelector(".filters").addEventListener("click", (e) => {
-  const b = e.target.closest(".chip");
+document.querySelector(".tabs").addEventListener("click", (e) => {
+  const b = e.target.closest(".tab");
   if (b) render(b.dataset.filter);
 });
 

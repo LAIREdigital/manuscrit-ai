@@ -8,70 +8,85 @@
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#3D3642">
   <link rel="icon" type="image/png" href="toolkit/img/a-mark.png">
-  <link rel="preload" href="toolkit/fonts/cormorant.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="toolkit/fonts/lato-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="toolkit/fonts/lato-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="toolkit/toolkit.css">
 </head>
 <body class="locked">
-  <!-- Coastal scallops: four layered waves (Seafoam, Tidewater, Sea Glass, Harbor), each offset half a bump -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="scallops" viewBox="0 0 1920 160" preserveAspectRatio="xMidYMax slice">
-      <path fill="#BBE6CE" d="M-96 50 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 L2112 160 L-96 160Z"/>
-      <path fill="#8BD8D5" d="M-144 88 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 L2112 160 L-144 160Z"/>
-      <path fill="#5BB8A6" d="M-96 126 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 L2112 160 L-96 160Z"/>
-      <path fill="#4A93B0" d="M-144 163 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 a48 48 0 0 1 96 0 L2112 160 L-144 160Z"/>
-    </symbol>
-  </svg>
-
   <div id="pin-screen" class="pin-screen">
-    <main class="pin-main">
-      <form id="pin-form" class="pin-card" autocomplete="off">
-        <img class="logo" src="toolkit/img/laire-wordmark-white.png" alt="LAIRE">
-        <p class="eyebrow">Toolkit</p>
-        <h1 class="display">Team tools, one place</h1>
-        <label for="pin">Enter the team PIN</label>
-        <input id="pin" name="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" required autofocus>
-        <p class="pin-error" id="pin-error" role="alert"></p>
-        <button class="btn btn-dune">Open the toolkit</button>
-      </form>
-    </main>
-    <svg class="scallops" aria-hidden="true"><use href="#scallops"/></svg>
+    <div class="split">
+      <div class="split-copy pin-copy">
+        <div class="topline"><img class="logo" src="toolkit/img/laire-logo-boxed-white.png" alt="LAIRE"></div>
+        <div class="hero-body">
+          <p class="eyebrow">LAIRE Toolkit</p>
+          <h1>Every tool the team has built, in one place.</h1>
+          <form id="pin-form" class="pin-form" autocomplete="off">
+            <label for="pin">Enter the team PIN</label>
+            <input id="pin" name="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" required autofocus>
+            <p class="pin-error" id="pin-error" role="alert"></p>
+            <button class="btn">Open the toolkit</button>
+          </form>
+        </div>
+      </div>
+      <div class="split-photo" style="background-image:url('toolkit/img/hero.jpg')" role="img" aria-label="Two LAIRE team members reviewing work at a desk"></div>
+    </div>
   </div>
 
   <div id="app" hidden>
-    <header class="masthead">
-      <div class="wrap top">
-        <a class="brand" href="./">
-          <img src="toolkit/img/laire-wordmark-white.png" alt="LAIRE">
-          <span class="eyebrow">Toolkit</span>
-        </a>
-        <button class="btn btn-outline-light" id="lock">Lock</button>
+    <header class="split">
+      <div class="split-copy hero">
+        <div class="topline">
+          <a href="./"><img class="logo" src="toolkit/img/laire-logo-boxed-white.png" alt="LAIRE"></a>
+          <button class="btn ghost" id="lock">Lock</button>
+        </div>
+        <div class="hero-body">
+          <p class="eyebrow">LAIRE Toolkit</p>
+          <h1>Every tool the team has built, in one place.</h1>
+          <p class="lead">Apps, agents and checks we made to work faster for clients and for ourselves.</p>
+          <p class="small" id="count"></p>
+          <a class="btn" href="#tools">See the tools</a>
+        </div>
       </div>
-      <section class="wrap hero">
-        <p class="eyebrow">Made at LAIRE</p>
-        <h1 class="display">Tools that do the busywork</h1>
-        <p>Everything we've built to work faster for clients and for ourselves. Pick one and get going.</p>
-      </section>
-      <svg class="scallops" aria-hidden="true" style="background:var(--laire-midnight)"><use href="#scallops"/></svg>
+      <div class="split-photo" style="background-image:url('toolkit/img/hero.jpg')" role="img" aria-label="Two LAIRE team members reviewing work at a desk"></div>
     </header>
 
     <main>
-      <div class="wrap toolbar">
-        <p class="eyebrow" id="count"></p>
-        <div class="filters" role="group" aria-label="Filter tools">
-          <button class="chip on" data-filter="all">All</button>
-          <button class="chip" data-filter="live">Live</button>
-          <button class="chip" data-filter="slack">In Slack</button>
-          <button class="chip" data-filter="soon">Coming soon</button>
+      <section class="section" id="tools">
+        <div class="wrap">
+          <div class="toolbar">
+            <div>
+              <p class="eyebrow">The tools</p>
+              <h2>Pick a tool and get to work</h2>
+            </div>
+            <div class="tabs" role="group" aria-label="Filter tools">
+              <button class="tab on" data-filter="all">All</button>
+              <button class="tab" data-filter="live">Live</button>
+              <button class="tab" data-filter="slack">In Slack</button>
+              <button class="tab" data-filter="soon">Coming soon</button>
+            </div>
+          </div>
+          <div id="grid" class="grid" aria-live="polite"></div>
         </div>
-      </div>
-      <section id="grid" class="wrap grid" aria-live="polite"></section>
+      </section>
+
+      <section class="section dark">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="eyebrow">Add your tool</p>
+            <h2>Built something the team should use?</h2>
+          </div>
+          <ol class="steps">
+            <li class="step"><span class="num">01</span><span>Get it working and decide who looks after it.</span></li>
+            <li class="step"><span class="num">02</span><span>Send Sam the link and one line on what it does.</span></li>
+            <li class="step"><span class="num">03</span><span>It goes up here with your name on it.</span></li>
+          </ol>
+        </div>
+      </section>
     </main>
 
     <footer class="site-foot">
       <div class="wrap">
-        <img src="toolkit/img/a-mark.png" alt="">
-        <p><strong>LAIRE Leads to Growth&reg;</strong> Each tool keeps its own sign-in and its own data.</p>
+        <img class="logo" src="toolkit/img/laire-logo-boxed-white.png" alt="LAIRE" style="width:110px">
+        <p>Each tool keeps its own sign-in and its own data.</p>
       </div>
     </footer>
   </div>
